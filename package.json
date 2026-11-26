@@ -1,6 +1,6 @@
 {
   "name": "chess-pgn-nyp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "PGN-visning med header, trækliste og varianter. Bruger chess-board-nyp til brættet.",
@@ -9,7 +9,7 @@
     "./src/*": "./src/*"
   },
   "scripts": {
-     "dev": "vite",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test test/*.test.js"
