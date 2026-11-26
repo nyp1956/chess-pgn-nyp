@@ -126,6 +126,7 @@ input[type="range"] { width: 100%; accent-color: $teal; }
 }
 
 .pgn-viewer {
+  --text-scale: 1;
   display: grid;
   grid-template-columns: minmax(0, var(--board-column)) minmax(0, 1fr);
   gap: 28px;
@@ -147,10 +148,17 @@ input[type="range"] { width: 100%; accent-color: $teal; }
   color: $ink;
   background: rgba(255, 255, 255, 0.58);
   font: inherit;
-  font-size: 0.8rem;
+  font-size: calc(0.8rem * var(--text-scale));
 }
 
 .pgn-viewer__select[hidden] { display: none; }
+
+// The text size slider sits in the gear panel. The board's panel styles give inputs a 15px width, so it is overridden here.
+.pgn-viewer__settings .game-controls__panel input[type="range"] {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
 
 .game-detail {
   min-width: 0;
@@ -169,7 +177,7 @@ input[type="range"] { width: 100%; accent-color: $teal; }
 .game-detail-event {
   margin: 0 0 12px;
   color: #68716d;
-  font-size: 1.3rem;
+  font-size: calc(1.3rem * var(--text-scale));
   overflow-wrap: anywhere;
 }
 
@@ -208,28 +216,28 @@ input[type="range"] { width: 100%; accent-color: $teal; }
   min-height: 26px;
   margin-bottom: 12px;
   padding: 0 8px;
-  font-size: 0.6rem;
+  font-size: calc(0.6rem * var(--text-scale));
 }
 
 .game-detail-tags-toggle[hidden] { display: none; }
 
-.game-detail-extra-tags { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0 0 14px; font-size: 0.8rem; }
+.game-detail-extra-tags { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0 0 14px; font-size: calc(0.8rem * var(--text-scale)); }
 .game-detail-extra-tags[hidden] { display: none; }
-.game-detail-extra-tags dt { color: $muted; font-size: 0.72rem; }
+.game-detail-extra-tags dt { color: $muted; font-size: calc(0.72rem * var(--text-scale)); }
 .game-detail-extra-tags dd { margin: 0; color: $ink; overflow-wrap: anywhere; }
 
-.game-detail-player { margin: 0 0 6px; font-size: 1.05rem; overflow-wrap: anywhere; }
-.game-detail-label { margin-right: 8px; color: $muted; font-size: 0.72rem; }
-.game-detail-rating { color: $muted; font-size: 0.76rem; }
+.game-detail-player { margin: 0 0 6px; font-size: calc(1.05rem * var(--text-scale)); overflow-wrap: anywhere; }
+.game-detail-label { margin-right: 8px; color: $muted; font-size: calc(0.72rem * var(--text-scale)); }
+.game-detail-rating { color: $muted; font-size: calc(0.76rem * var(--text-scale)); }
 
-.game-detail-opening { margin: 0; color: $ink; font-size: 0.95rem; line-height: 24px; overflow-wrap: anywhere; }
+.game-detail-opening { margin: 0; color: $ink; font-size: calc(0.95rem * var(--text-scale)); line-height: calc(24px * var(--text-scale)); overflow-wrap: anywhere; }
 .game-detail-opening:empty { display: none; }
 
 .game-detail-start {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
+  width: calc(18px * var(--text-scale));
   padding: 0;
   border: 0;
   color: $teal;
@@ -238,13 +246,13 @@ input[type="range"] { width: 100%; accent-color: $teal; }
 }
 
 .game-detail-start:hover, .game-detail-start:focus-visible { color: $accent; background: transparent; }
-.game-detail-start svg { width: 18px; height: 18px; }
+.game-detail-start svg { width: calc(18px * var(--text-scale)); height: calc(18px * var(--text-scale)); }
 
-.game-detail-empty { margin: 0; color: $muted; font-size: 0.85rem; }
+.game-detail-empty { margin: 0; color: $muted; font-size: calc(0.85rem * var(--text-scale)); }
 
-.game-detail-result { margin: 14px 0 0; padding-top: 14px; border-top: 1px solid $line; color: $teal; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.game-detail-result { margin: 14px 0 0; padding-top: 14px; border-top: 1px solid $line; color: $teal; font-size: calc(0.74rem * var(--text-scale)); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
-.move-list { display: block; margin-bottom: 4px; line-height: 24px; white-space: normal; }
+.move-list { display: block; margin-bottom: 4px; line-height: calc(24px * var(--text-scale)); white-space: normal; }
 .move-row { display: block; margin-bottom: 12px; }
 .move-row--tree { white-space: normal; }
 .move-variation { margin: 0 3px; white-space: normal; }
@@ -252,29 +260,29 @@ input[type="range"] { width: 100%; accent-color: $teal; }
 .move-bullet { color: $muted; }
 .move-number {
   margin-right: 5px;
-  font-size: 1.2rem;
-  line-height: 24px;
+  font-size: calc(1.2rem * var(--text-scale));
+  line-height: calc(24px * var(--text-scale));
   vertical-align: middle;
 }
-.move-label { color: $muted; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.move-label { color: $muted; font-size: calc(0.68rem * var(--text-scale)); letter-spacing: 0.08em; text-transform: uppercase; }
 
 .move-chip {
-  min-height: 24px;
+  min-height: calc(24px * var(--text-scale));
   padding: 0;
   border: 0;
   border-radius: 0;
   color: $ink;
   background: transparent;
   font: inherit;
-  font-size: 1.2rem;
-  line-height: 24px;
+  font-size: calc(1.2rem * var(--text-scale));
+  line-height: calc(24px * var(--text-scale));
   letter-spacing: 0;
   text-transform: none;
   vertical-align: middle;
   cursor: pointer;
 }
 
-.move-row > .move-chip:first-of-type { font-size: 0.78rem; color: $muted; }
+.move-row > .move-chip:first-of-type { font-size: calc(0.78rem * var(--text-scale)); color: $muted; }
 .move-chip:hover, .move-chip:focus-visible { color: $teal; background: transparent; text-decoration: underline; }
 .move-chip.is-selected { color: $teal; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 

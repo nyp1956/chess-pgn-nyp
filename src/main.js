@@ -21,6 +21,7 @@ const languageInput = document.querySelector('#language');
 const fileInput = document.querySelector('#pgn-file');
 const textInput = document.querySelector('#pgn-text');
 const sizeInput = document.querySelector('#board-size');
+const textSizeInput = document.querySelector('#text-size');
 const variantForm = document.querySelector('#variant-form');
 const variantInput = document.querySelector('#variant-text');
 const errorBox = document.querySelector('#pgn-error');
@@ -86,6 +87,13 @@ document.querySelector('#load-sample').addEventListener('click', () => {
 const setBoardColumn = () => root.style.setProperty('--board-column', `${sizeInput.value}px`);
 sizeInput.addEventListener('input', setBoardColumn);
 setBoardColumn();
+
+// The text size can also be changed in the viewer's gear panel, so this slider follows the viewer's value.
+textSizeInput.value = String(viewer.textScale);
+textSizeInput.addEventListener('input', () => viewer.setTextScale(Number(textSizeInput.value)));
+viewer.element.addEventListener('textscalechange', (event) => {
+  textSizeInput.value = String(event.detail.textScale);
+});
 
 variantForm.addEventListener('submit', (event) => {
   event.preventDefault();

@@ -26,7 +26,14 @@ function el(tag, className, text) {
 }
 
 const SETTINGS_KEY = 'chess-pgn-nyp:settings';
-const DEFAULT_SETTINGS = { variationList: false, figurine: true };
+// Text size in percent of the normal size. The CSS multiplies the text sizes by this.
+const TEXT_SCALE = { min: 80, max: 160, step: 10, default: 100 };
+const DEFAULT_SETTINGS = { variationList: false, figurine: true, textScale: TEXT_SCALE.default };
+
+const isTextScale = (value) => Number.isInteger(value)
+  && value >= TEXT_SCALE.min
+  && value <= TEXT_SCALE.max
+  && value % TEXT_SCALE.step === 0;
 
 function loadSettings() {
   try {
@@ -34,6 +41,7 @@ function loadSettings() {
     return {
       variationList: saved.variationList === true,
       figurine: saved.figurine !== false,
+      textScale: isTextScale(saved.textScale) ? saved.textScale : TEXT_SCALE.default,
     };
   } catch {
     return { ...DEFAULT_SETTINGS };
@@ -94,11 +102,26 @@ export default class PgnViewer {
     this.#board = new ChessBoard(boardHost, { ariaLabel: options.ariaLabel, locale: this.#locale, controls: true, promotion: 'ask' });
     this.#board.element.addEventListener('chessboard:change', this.#handleBoardChange);
 
+    this.#applyTextScale();
     this.#applyLocale();
   }
 
   get locale() {
     return this.#locale;
+  }
+
+  get textScale() {
+    return this.#settings.textScale;
+  }
+
+  // Sets the text size in percent (80-160 in steps of 10). The choice is remembered in the browser.
+  // Dispatches 'textscalechange' on the viewer element, so the page can keep its own control in sync.
+  setTextScale(percent) {
+    if (!isTextScale(percent)) throw new RangeError(`Unknown text size: ${percent}`);
+    this.#settings = { ...this.#settings, textScale: percent };
+    saveSettings(this.#settings);
+    this.#applyTextScale();
+    this.element.dispatchEvent(new CustomEvent('textscalechange', { bubbles: true, detail: { textScale: percent } }));
   }
 
   // Changes the language of the viewer and its board. Only 'da' and 'en' are supported.
@@ -199,6 +222,7 @@ export default class PgnViewer {
     this.#refs.settingsSummary.title = this.#t('settings.open');
     this.#refs.variationList.text.textContent = this.#t('settings.variations');
     this.#refs.figurine.text.textContent = this.#t('settings.figurine');
+    this.#refs.textScale.text.textContent = this.#t('settings.textSize');
     this.#refs.white.label.textContent = `${this.#t('header.white')}:`;
     this.#refs.black.label.textContent = `${this.#t('header.black')}:`;
     this.#renderGameOptions();
@@ -239,6 +263,7 @@ export default class PgnViewer {
     refs.settingsPanel.append(
       this.#settingOption('variationList'),
       this.#settingOption('figurine'),
+      this.#textScaleOption(),
     );
     refs.settings.append(refs.settingsSummary, refs.settingsPanel);
     document.addEventListener('click', (event) => {
@@ -278,6 +303,25 @@ export default class PgnViewer {
     label.append(input, ' ', text);
     this.#refs[name] = { input, text };
     return label;
+  }
+
+  #textScaleOption() {
+    const input = el('input');
+    input.type = 'range';
+    input.min = String(TEXT_SCALE.min);
+    input.max = String(TEXT_SCALE.max);
+    input.step = String(TEXT_SCALE.step);
+    input.value = String(this.#settings.textScale);
+    input.addEventListener('input', () => this.setTextScale(Number(input.value)));
+    const text = el('span');
+    const label = el('label', 'pgn-viewer__text-size');
+    label.append(text, input);
+    this.#refs.textScale = { input, text };
+    return label;
+  }
+
+  #applyTextScale() {
+    this.element.style.setProperty('--text-scale', String(this.#settings.textScale / 100));
   }
 
   #playerRow() {
