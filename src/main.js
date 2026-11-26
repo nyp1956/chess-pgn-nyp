@@ -22,6 +22,7 @@ const fileInput = document.querySelector('#pgn-file');
 const textInput = document.querySelector('#pgn-text');
 const sizeInput = document.querySelector('#board-size');
 const textSizeInput = document.querySelector('#text-size');
+const fontFamilyInput = document.querySelector('#font-family');
 const variantForm = document.querySelector('#variant-form');
 const variantInput = document.querySelector('#variant-text');
 const errorBox = document.querySelector('#pgn-error');
@@ -93,6 +94,13 @@ textSizeInput.value = String(viewer.textScale);
 textSizeInput.addEventListener('input', () => viewer.setTextScale(Number(textSizeInput.value)));
 viewer.element.addEventListener('textscalechange', (event) => {
   textSizeInput.value = String(event.detail.textScale);
+});
+
+// The font can also be changed in the viewer's gear panel, so this select follows the viewer's value.
+fontFamilyInput.value = viewer.fontFamily;
+fontFamilyInput.addEventListener('change', () => viewer.setFontFamily(fontFamilyInput.value));
+viewer.element.addEventListener('fontfamilychange', (event) => {
+  fontFamilyInput.value = event.detail.fontFamily;
 });
 
 variantForm.addEventListener('submit', (event) => {

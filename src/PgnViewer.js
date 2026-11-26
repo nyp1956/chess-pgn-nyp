@@ -28,7 +28,15 @@ function el(tag, className, text) {
 const SETTINGS_KEY = 'chess-pgn-nyp:settings';
 // Text size in percent of the normal size. The CSS multiplies the text sizes by this.
 const TEXT_SCALE = { min: 80, max: 160, step: 10, default: 100 };
-const DEFAULT_SETTINGS = { variationList: false, figurine: true, textScale: TEXT_SCALE.default };
+// Font stacks for the viewer. 'default' is the page's font, so the viewer looks as before unless changed.
+const FONT_FAMILIES = {
+  default: '"Open Sans", Arial, sans-serif',
+  serif: 'Georgia, "Times New Roman", serif',
+  verdana: 'Verdana, Tahoma, sans-serif',
+  mono: 'Consolas, "Courier New", monospace',
+};
+const isFontFamily = (value) => Object.hasOwn(FONT_FAMILIES, value);
+const DEFAULT_SETTINGS = { variationList: false, figurine: true, textScale: TEXT_SCALE.default, fontFamily: 'default' };
 
 const isTextScale = (value) => Number.isInteger(value)
   && value >= TEXT_SCALE.min
@@ -42,6 +50,7 @@ function loadSettings() {
       variationList: saved.variationList === true,
       figurine: saved.figurine !== false,
       textScale: isTextScale(saved.textScale) ? saved.textScale : TEXT_SCALE.default,
+      fontFamily: isFontFamily(saved.fontFamily) ? saved.fontFamily : 'default',
     };
   } catch {
     return { ...DEFAULT_SETTINGS };
@@ -103,6 +112,7 @@ export default class PgnViewer {
     this.#board.element.addEventListener('chessboard:change', this.#handleBoardChange);
 
     this.#applyTextScale();
+    this.#applyFontFamily();
     this.#applyLocale();
   }
 
@@ -120,8 +130,24 @@ export default class PgnViewer {
     if (!isTextScale(percent)) throw new RangeError(`Unknown text size: ${percent}`);
     this.#settings = { ...this.#settings, textScale: percent };
     saveSettings(this.#settings);
+    this.#refs.textScale.input.value = String(percent);
     this.#applyTextScale();
     this.element.dispatchEvent(new CustomEvent('textscalechange', { bubbles: true, detail: { textScale: percent } }));
+  }
+
+  get fontFamily() {
+    return this.#settings.fontFamily;
+  }
+
+  // Sets the font for the viewer: 'default', 'serif', 'verdana' or 'mono'. The choice is remembered in the browser.
+  // Dispatches 'fontfamilychange' on the viewer element, so the page can keep its own control in sync.
+  setFontFamily(name) {
+    if (!isFontFamily(name)) throw new RangeError(`Unknown font: ${name}`);
+    this.#settings = { ...this.#settings, fontFamily: name };
+    saveSettings(this.#settings);
+    this.#refs.fontFamily.select.value = name;
+    this.#applyFontFamily();
+    this.element.dispatchEvent(new CustomEvent('fontfamilychange', { bubbles: true, detail: { fontFamily: name } }));
   }
 
   // Changes the language of the viewer and its board. Only 'da' and 'en' are supported.
@@ -223,6 +249,10 @@ export default class PgnViewer {
     this.#refs.variationList.text.textContent = this.#t('settings.variations');
     this.#refs.figurine.text.textContent = this.#t('settings.figurine');
     this.#refs.textScale.text.textContent = this.#t('settings.textSize');
+    this.#refs.fontFamily.text.textContent = this.#t('settings.font');
+    this.#refs.fontFamily.select.querySelectorAll('option').forEach((option) => {
+      option.textContent = this.#t(`font.${option.value}`);
+    });
     this.#refs.white.label.textContent = `${this.#t('header.white')}:`;
     this.#refs.black.label.textContent = `${this.#t('header.black')}:`;
     this.#renderGameOptions();
@@ -264,6 +294,7 @@ export default class PgnViewer {
       this.#settingOption('variationList'),
       this.#settingOption('figurine'),
       this.#textScaleOption(),
+      this.#fontFamilyOption(),
     );
     refs.settings.append(refs.settingsSummary, refs.settingsPanel);
     document.addEventListener('click', (event) => {
@@ -320,8 +351,28 @@ export default class PgnViewer {
     return label;
   }
 
+  #fontFamilyOption() {
+    const select = el('select');
+    select.append(...Object.keys(FONT_FAMILIES).map((name) => {
+      const option = el('option');
+      option.value = name;
+      return option;
+    }));
+    select.value = this.#settings.fontFamily;
+    select.addEventListener('change', () => this.setFontFamily(select.value));
+    const text = el('span');
+    const label = el('label', 'pgn-viewer__font');
+    label.append(text, select);
+    this.#refs.fontFamily = { select, text };
+    return label;
+  }
+
   #applyTextScale() {
     this.element.style.setProperty('--text-scale', String(this.#settings.textScale / 100));
+  }
+
+  #applyFontFamily() {
+    this.element.style.fontFamily = FONT_FAMILIES[this.#settings.fontFamily];
   }
 
   #playerRow() {

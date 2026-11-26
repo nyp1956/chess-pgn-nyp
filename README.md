@@ -1,6 +1,6 @@
 # chess-pgn-nyp
 
-A standalone app that shows a PGN file with its headers and game. Each move can be clicked, and the position is shown on a [chess-board-nyp](../chess-board-nyp) board. Variations (in parentheses) are shown as separate lines, or as indented bullets if you turn that on under the gear icon next to the game title. Under the same gear icon, move text can be shown with figurine symbols (♘ ♗ ♕ etc.) instead of letters. This is on by default. The text size can be set from 80% to 160% under the gear icon, and also with the "Text size" slider on the demo page. These choices are remembered in the browser between page loads. Moves played on the board are recorded in the game: after the last move they are added to the main line, and a move made in the middle of the line becomes a variation.
+A standalone app that shows a PGN file with its headers and game. Each move can be clicked, and the position is shown on a [chess-board-nyp](../chess-board-nyp) board. Variations (in parentheses) are shown as separate lines, or as indented bullets if you turn that on under the gear icon next to the game title. Under the same gear icon, move text can be shown with figurine symbols (♘ ♗ ♕ etc.) instead of letters. This is on by default. The text size can be set from 80% to 160% under the gear icon, and also with the "Text size" slider on the demo page. The font can be chosen under the gear icon and on the demo page: default, serif (Georgia), Verdana or monospace. These choices are remembered in the browser between page loads. Moves played on the board are recorded in the game: after the last move they are added to the main line, and a move made in the middle of the line becomes a variation.
 
 ## Getting started
 
@@ -25,13 +25,14 @@ viewer.showGame(0);               // selects a game (index)
 viewer.showLine(line, ply);       // shows a line from parsing; ply is the move that should be current
 viewer.addVariant('1. d4 d5 2. c4 (2. Nf3)'); // variation from the board's current position
 viewer.setTextScale(120);         // text size in percent (80-160, steps of 10); remembered in the browser
+viewer.setFontFamily('serif');    // 'default', 'serif', 'verdana' or 'mono'; remembered in the browser
 viewer.board;                     // the ChessBoard instance
 viewer.games;                     // parsed games
 ```
 
-The size is controlled by the containing element: the board fills the width of the board column in `#pgn-root`. The board width can be set with the CSS variable `--board-column` (the demo in `src/main.js` sets it). The text size is set with `setTextScale()` and is not changed by the board's own labels.
+The size is controlled by the containing element: the board fills the width of the board column in `#pgn-root`. The board width can be set with the CSS variable `--board-column` (the demo in `src/main.js` sets it). The text size is set with `setTextScale()` and is not changed by the board's own labels. The font is set with `setFontFamily()` and applies to the viewer's text.
 
-The viewer dispatches a `textscalechange` event on `viewer.element` when the text size changes, with the new value in `event.detail.textScale`.
+The viewer dispatches a `textscalechange` event on `viewer.element` when the text size changes, with the new value in `event.detail.textScale`. It dispatches `fontfamilychange` in the same way, with `event.detail.fontFamily`.
 
 ## Language
 
