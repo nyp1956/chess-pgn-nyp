@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parsePgn, parseMoveText, recordMove } from '../src/pgn.js';
+import { parsePgn, parseMoveText, recordMove, removeMovesAfter, findBranch } from '../src/pgn.js';
 
 const SAMPLE = `[Event "Testturnering"]
 [White "Hvid, Anna"]
@@ -153,3 +153,31 @@ test('playing the next move of the line just moves on', () => {
   assert.deepEqual(recordMove(game.line, 0, 'e4'), { line: game.line, ply: 1 });
   assert.equal(game.line.moves.length, 2);
 });
+
+test('deleting after a position removes later moves with their variations and end variations', () => {
+  const [game] = parsePgn('1. e4 e5 2. Nf3 (2. f4) Nc6 *');
+  const f4 = game.line.moves[2].variations[0];
+  const endLine = recordMove(game.line, 4, 'Bc4', { finished: true }).line;
+  const removed = removeMovesAfter(game.line, 2);
+  assert.deepEqual(game.line.moves.map((m) => m.san), ['e4', 'e5']);
+  assert.equal(game.line.endVariations, undefined);
+  assert.equal(removed.size, 2);
+  assert.ok(removed.has(f4));
+  assert.ok(removed.has(endLine));
+});
+
+test('findBranch gives the ply and the list where a variation starts, including nested ones', () => {
+  const [game] = parsePgn('1. e4 e5 2. Nf3 (2. f4 exf4 (2... d5)) Nc6');
+  const f4 = game.line.moves[2].variations[0];
+  const d5 = f4.moves[1].variations[0];
+  const top = findBranch(game.line, f4);
+  assert.equal(top.line, game.line);
+  assert.equal(top.ply, 2);
+  assert.equal(top.list, game.line.moves[2].variations);
+  const nested = findBranch(game.line, d5);
+  assert.equal(nested.line, f4);
+  assert.equal(nested.ply, 1);
+  assert.equal(nested.list, f4.moves[1].variations);
+  assert.equal(findBranch(game.line, { moves: [] }), null);
+});
+

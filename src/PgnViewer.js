@@ -1,6 +1,6 @@
 import { ChessBoard } from 'chess-board-nyp/src/index.js';
 import './styles/pgn-viewer.scss';
-import { parsePgn, parseMoveText, recordMove } from './pgn.js';
+import { parsePgn, parseMoveText, recordMove, removeMovesAfter, findBranch } from './pgn.js';
 import { detectLocale, isLocale, tagLabel, toLocaleSan, translate } from './i18n.js';
 
 const EVENT_TAGS = ['Event', 'Site', 'EventDate', 'Round'];
@@ -211,6 +211,46 @@ export default class PgnViewer {
     return line;
   }
 
+  // Removes the moves after the shown position, with their variations. A variation left empty is removed from its line.
+  // Returns the number of moves removed.
+  deleteMovesAfterPosition() {
+    const line = this.#line;
+    if (!line) return 0;
+    const count = line.moves.length - this.#ply;
+    const removed = removeMovesAfter(line, this.#ply);
+    this.#variants = this.#variants.filter((variant) => !removed.has(variant));
+
+    let target = { line, ply: this.#ply };
+    if (line.moves.length === 0 && line !== this.#game?.line) {
+      const branch = this.#findBranchFromRoots(line);
+      if (branch) {
+        branch.list.splice(branch.list.indexOf(line), 1);
+        this.#variants = this.#variants.filter((variant) => variant !== line);
+        target = { line: branch.line, ply: branch.ply };
+      }
+    }
+    this.showLine(target.line, target.ply);
+    this.#emitChange('delete', null);
+    return count;
+  }
+
+  #findBranchFromRoots(target) {
+    for (const root of [this.#game?.line, ...this.#variants].filter(Boolean)) {
+      const branch = findBranch(root, target);
+      if (branch) return branch;
+    }
+    return null;
+  }
+
+  // Dispatches 'pgnchange' on the viewer element after the game changes, so the page can save it.
+  // reason is 'move' or 'delete'; san is the move played, or null.
+  #emitChange(reason, san) {
+    this.element.dispatchEvent(new CustomEvent('pgnchange', {
+      bubbles: true,
+      detail: { reason, san, line: this.#line, ply: this.#ply, fen: this.#board.game.fen() },
+    }));
+  }
+
   #handleBoardChange = (event) => {
     const { reason, ply } = event.detail;
     if (reason === 'navigate' && this.#line) {
@@ -229,6 +269,7 @@ export default class PgnViewer {
     const onMainLine = this.#line === this.#game?.line;
     const target = recordMove(this.#line, ply - 1, san, { finished: onMainLine && this.#isFinished(), root: this.#game?.line ?? this.#line, freeVariants: this.#variants });
     this.showLine(target.line, target.ply);
+    this.#emitChange('move', san);
   }
 
   #isFinished() {

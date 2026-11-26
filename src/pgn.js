@@ -175,3 +175,37 @@ export function recordMove(line, ply, san, { finished = false, root = line, free
   alternatives.push(variation);
   return { line: variation, ply: 1 };
 }
+
+// Removes the moves after ply of line, with their variations and the alternatives after the last move.
+// Returns the set of lines that were removed, so the caller can forget them.
+export function removeMovesAfter(line, ply) {
+  const removed = line.moves.splice(ply);
+  const detached = [...removed.flatMap((move) => move.variations), ...(line.endVariations ?? [])];
+  delete line.endVariations;
+  return collectLines(detached);
+}
+
+// Finds where target branches off below line: the line and ply it starts from, and the list that holds it.
+export function findBranch(line, target) {
+  const branches = [
+    ...line.moves.map((move, ply) => ({ ply, list: move.variations })),
+    { ply: line.moves.length, list: line.endVariations ?? [] },
+  ];
+  for (const { ply, list } of branches) {
+    if (list.includes(target)) return { line, ply, list };
+    for (const variation of list) {
+      const found = findBranch(variation, target);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+function collectLines(lines, found = new Set()) {
+  for (const line of lines) {
+    found.add(line);
+    line.moves.forEach((move) => collectLines(move.variations, found));
+    collectLines(line.endVariations ?? [], found);
+  }
+  return found;
+}

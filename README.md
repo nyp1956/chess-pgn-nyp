@@ -24,6 +24,7 @@ viewer.loadPgn(pgnText);          // loads all games in the text
 viewer.showGame(0);               // selects a game (index)
 viewer.showLine(line, ply);       // shows a line from parsing; ply is the move that should be current
 viewer.addVariant('1. d4 d5 2. c4 (2. Nf3)'); // variation from the board's current position
+viewer.deleteMovesAfterPosition();  // removes the moves after the shown position, with their variations; returns the count
 viewer.setTextScale(120);         // text size in percent (80-160, steps of 10); remembered in the browser
 viewer.setFontFamily('serif');    // 'default', 'serif', 'verdana' or 'mono'; remembered in the browser
 viewer.board;                     // the ChessBoard instance
@@ -33,6 +34,9 @@ viewer.games;                     // parsed games
 The size is controlled by the containing element: the board fills the width of the board column in `#pgn-root`. The board width can be set with the CSS variable `--board-column` (the demo in `src/main.js` sets it). The text size is set with `setTextScale()` and is not changed by the board's own labels. The font is set with `setFontFamily()` and applies to the viewer's text.
 
 The viewer dispatches a `textscalechange` event on `viewer.element` when the text size changes, with the new value in `event.detail.textScale`. It dispatches `fontfamilychange` in the same way, with `event.detail.fontFamily`.
+
+The viewer dispatches a `pgnchange` event on `viewer.element` when the user adds a move on the board (`reason` `'move'`, `san` is the move) or when `deleteMovesAfterPosition()` is called (`reason` `'delete'`, `san` is `null`). `event.detail` also has `line` (the line shown, which is changed in place), `ply` (the current ply) and `fen` (the board position). The page can use it to save the game.
+
 
 ## Language
 
