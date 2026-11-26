@@ -287,6 +287,7 @@ input[type="range"] { width: 100%; accent-color: $teal; }
 .move-row > .move-chip:first-of-type { font-size: calc(0.78rem * var(--text-scale)); color: $muted; }
 .move-chip:hover, .move-chip:focus-visible { color: $teal; background: transparent; text-decoration: underline; }
 .move-chip.is-selected { color: $teal; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.move-eval { margin-left: 4px; color: $muted; font-size: .68em; font-weight: 400; }
 
 @media (max-width: 800px) {
   .pgn-viewer { grid-template-columns: minmax(0, 1fr); }

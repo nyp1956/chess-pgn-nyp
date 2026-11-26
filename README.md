@@ -27,6 +27,8 @@ viewer.addVariant('1. d4 d5 2. c4 (2. Nf3)'); // variation from the board's curr
 viewer.deleteMovesAfterPosition();  // removes the moves after the shown position, with their variations; returns the count
 viewer.setTextScale(120);         // text size in percent (80-160, steps of 10); remembered in the browser
 viewer.setFontFamily('serif');    // 'default', 'serif', 'verdana' or 'mono'; remembered in the browser
+viewer.setMainLine(line, ply);    // shows a line without a PGN game (e.g. built by the page); ply defaults to the last move
+viewer.setFigurine(true);         // figurine (♘) or letter (N) piece symbols; not saved in the browser
 viewer.board;                     // the ChessBoard instance
 viewer.games;                     // parsed games
 ```
@@ -36,6 +38,21 @@ The size is controlled by the containing element: the board fills the width of t
 The viewer dispatches a `textscalechange` event on `viewer.element` when the text size changes, with the new value in `event.detail.textScale`. It dispatches `fontfamilychange` in the same way, with `event.detail.fontFamily`.
 
 The viewer dispatches a `pgnchange` event on `viewer.element` when the user adds a move on the board (`reason` `'move'`, `san` is the move) or when `deleteMovesAfterPosition()` is called (`reason` `'delete'`, `san` is `null`). `event.detail` also has `line` (the line shown, which is changed in place), `ply` (the current ply) and `fen` (the board position). The page can use it to save the game.
+
+When a move in the move list is clicked, the viewer sets the position on its board and dispatches a bubbling `pgnnavigate` event on `viewer.element` with `event.detail` of `line`, `ply` and `fen`. A page can use it to update its own state (e.g. the selected move).
+
+Moves can have an `evaluation` string (e.g. `'+0.35'`). It is shown as a small muted value after the move in the move list.
+
+### Embedded mode
+
+Pass an existing board as `options.board` to show only the move list. The viewer then does not create a board and does not record moves made on that board (no `pgnchange`), so the page must handle its own moves and call `setMainLine()` or `showLine()` after them. Clicking a move, and `showLine()`, still set the position on the board. Only the move list is added to the page; the header and settings are not shown.
+
+```js
+const viewer = new PgnViewer(moveListRoot, { board: existingChessBoard });
+viewer.setMainLine(line, ply);
+viewer.element.addEventListener('pgnnavigate', (event) => { selectedPly = event.detail.ply; });
+```
+
 
 
 ## Language

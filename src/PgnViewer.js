@@ -79,10 +79,13 @@ export default class PgnViewer {
   #ply = 0;
   #selectedChip = null;
   #board;
+  #embedded;
   #refs = {};
   #locale;
   #settings = loadSettings();
 
+  // options.board: a ChessBoard the page already shows. Then the viewer only renders the move list,
+  // moves on that board are not recorded, and 'pgnnavigate' tells the page when the position changes.
   constructor(container, options = {}) {
     if (!(container instanceof HTMLElement)) {
       throw new TypeError('PgnViewer needs a container element');
@@ -91,6 +94,7 @@ export default class PgnViewer {
       throw new RangeError(`Unknown locale: ${options.locale}`);
     }
     this.#locale = options.locale ?? detectLocale();
+    this.#embedded = options.board !== undefined;
 
     this.element = el('section', 'pgn-viewer');
 
@@ -105,11 +109,15 @@ export default class PgnViewer {
     this.#refs.result = el('p', 'game-detail-result');
     details.append(this.#refs.select, this.#buildHeader(), this.#refs.moves, this.#refs.result);
 
-    this.element.append(boardFrame, details);
+    if (this.#embedded) {
+      this.#board = options.board;
+      this.element.append(this.#refs.moves);
+    } else {
+      this.element.append(boardFrame, details);
+      this.#board = new ChessBoard(boardHost, { ariaLabel: options.ariaLabel, locale: this.#locale, controls: true, promotion: 'ask' });
+      this.#board.element.addEventListener('chessboard:change', this.#handleBoardChange);
+    }
     container.append(this.element);
-
-    this.#board = new ChessBoard(boardHost, { ariaLabel: options.ariaLabel, locale: this.#locale, controls: true, promotion: 'ask' });
-    this.#board.element.addEventListener('chessboard:change', this.#handleBoardChange);
 
     this.#applyTextScale();
     this.#applyFontFamily();
@@ -154,8 +162,23 @@ export default class PgnViewer {
   setLocale(locale) {
     if (!isLocale(locale)) throw new RangeError(`Unknown locale: ${locale}`);
     this.#locale = locale;
-    this.#board.configure({ locale });
+    if (!this.#embedded) this.#board.configure({ locale });
     this.#applyLocale();
+  }
+
+  // Shows the moves of the page's own game: line is the main line, and its variations are alternatives.
+  // Embedded use only: shows the page's own game as the main line.
+  setMainLine(line, ply = line.moves.length) {
+    this.#game = { headers: {}, result: null, line };
+    this.#variants = [];
+    this.showLine(line, ply);
+  }
+
+  // Changes whether the SAN is shown with figurines. Used by the page to follow its own notation setting.
+  setFigurine(enabled) {
+    this.#settings = { ...this.#settings, figurine: Boolean(enabled) };
+    this.#refs.figurine.input.checked = this.#settings.figurine;
+    if (this.#game) this.#renderMoves();
   }
 
   get board() {
@@ -185,7 +208,7 @@ export default class PgnViewer {
     this.#variants = [];
     this.#refs.select.value = String(index);
     this.#renderHeaders();
-    this.#board.setHeaders(this.#boardHeaders());
+    if (!this.#embedded) this.#board.setHeaders(this.#boardHeaders());
     this.showLine(game.line, 0);
   }
 
@@ -473,7 +496,13 @@ export default class PgnViewer {
   }
 
   #showStart() {
-    this.showLine(this.#game.line, 0);
+    this.#navigate(this.#game.line, 0);
+  }
+
+  // Shows a position that the user picked in the move list, and tells the page about it.
+  #navigate(line, ply) {
+    this.showLine(line, ply);
+    this.element.dispatchEvent(new CustomEvent('pgnnavigate', { bubbles: true, detail: { line, ply, fen: this.#board.game.fen() } }));
   }
 
   #renderMoves() {
@@ -550,7 +579,7 @@ export default class PgnViewer {
       container.append(el('span', 'move-number', `${move.moveNumber}...`));
     }
     const display = toLocaleSan(move.san, this.#locale, { figurine: this.#settings.figurine, color: move.color });
-    container.append(this.#chip(line, index + 1, display), ' ');
+    container.append(this.#chip(line, index + 1, display, move.evaluation ?? null), ' ');
   }
 
   #renderVariations(variations, container) {
@@ -563,14 +592,16 @@ export default class PgnViewer {
     });
   }
 
-  #chip(line, ply, label) {
+  // evaluation is optional text (set by the page) shown after the move in smaller type.
+  #chip(line, ply, label, evaluation = null) {
     const button = el('button', 'move-chip', label);
     button.type = 'button';
+    if (evaluation) button.append(el('small', 'move-eval', evaluation));
     const selected = line === this.#line && ply === this.#ply;
     button.classList.toggle('is-selected', selected);
     button.setAttribute('aria-pressed', String(selected));
     if (selected) this.#selectedChip = button;
-    button.addEventListener('click', () => this.showLine(line, ply));
+    button.addEventListener('click', () => this.#navigate(line, ply));
     return button;
   }
 }
