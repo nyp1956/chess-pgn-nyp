@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chess-pgn-nyp</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./">chess-pgn<span>-nyp</span></a>
+      <span class="topbar-meta" data-i18n="app.topbar">PGN-visning</span>
+    </header>
+
+    <main class="workspace pgn-app">
+      <section class="pgn-app__load" data-i18n-aria-label="load.label" aria-label="Indlæs PGN">
+        <div class="pgn-app__row">
+          <label class="pgn-app__file">
+            <span data-i18n="load.file">PGN-fil</span>
+            <input type="file" id="pgn-file" accept=".pgn,.txt,text/plain" />
+          </label>
+          <label class="pgn-app__size">
+            <span data-i18n="load.width">Brætbredde</span>
+            <input type="range" id="board-size" min="280" max="720" step="10" value="480" />
+          </label>
+          <label class="pgn-app__language">
+            <span data-i18n="app.language">Sprog</span>
+            <select id="language">
+              <option value="da">Dansk</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+        </div>
+        <label for="pgn-text" data-i18n="load.paste">Eller indsæt PGN</label>
+        <textarea id="pgn-text" class="pgn-app__text" rows="6" spellcheck="false"></textarea>
+        <div class="pgn-app__row">
+          <button type="button" id="load-text" data-i18n="load.text">Indlæs tekst</button>
+          <button type="button" id="load-sample" data-i18n="load.example">Eksempel</button>
+        </div>
+        <p id="pgn-error" class="pgn-app__error" role="alert" hidden></p>
+      </section>
+
+      <form class="pgn-app__variant" id="variant-form">
+        <label for="variant-text" data-i18n="variant.label">Variant fra stillingen på brættet</label>
+        <div class="pgn-app__row">
+          <input type="text" id="variant-text" data-i18n-placeholder="variant.placeholder" placeholder="fx 1... c5 2. Nf3 (2. c3 d5)" spellcheck="false" />
+          <button type="submit" data-i18n="variant.submit">Vis variant</button>
+        </div>
+      </form>
+
+      <div id="pgn-root" class="pgn-app__viewer"></div>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

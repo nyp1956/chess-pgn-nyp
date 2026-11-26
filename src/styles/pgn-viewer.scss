@@ -1,0 +1,284 @@
+$ink: #17211f;
+$paper: #e8e5dc;
+$surface: #f4f1e9;
+$accent: #d76543;
+$teal: #4A2A0C ;
+$muted: #68716d;
+$line: rgba(23, 33, 31, 0.16);
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: $ink;
+  background: $paper;
+  font-family: "Open Sans", Arial, sans-serif;
+}
+
+body::before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  background: radial-gradient(circle at 84% 8%, rgba(215, 101, 67, 0.12), transparent 28%), linear-gradient(120deg, rgba(30, 98, 94, 0.06), transparent 45%);
+  content: '';
+}
+
+label {
+  display: block;
+  margin-bottom: 9px;
+  color: $muted;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1, h2 { font-weight: 400; }
+
+button {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid $line;
+  border-radius: 3px;
+  color: $ink;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+button:hover, button:focus-visible { border-color: $teal; color: $teal; }
+
+input[type="text"], textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid $line;
+  color: $ink;
+  background: rgba(255, 255, 255, 0.58);
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+input[type="range"] { width: 100%; accent-color: $teal; }
+
+.topbar,
+.workspace {
+  width: min(1240px, calc(100% - 64px));
+  margin: 0 auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 0;
+  border-bottom: 1px solid $line;
+}
+
+.brand { color: $ink; font-size: 1.25rem; text-decoration: none; }
+.brand span { color: $accent; }
+
+.topbar-meta {
+  color: $muted;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pgn-app { padding: 40px 0 34px; }
+
+.pgn-app__load,
+.pgn-app__variant {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.pgn-app__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.pgn-app__file,
+.pgn-app__size { flex: 1 1 240px; margin: 0; }
+.pgn-app__language { flex: 0 0 auto; margin: 0; }
+.pgn-app__size input { margin-top: 2px; }
+.pgn-app__row button { flex: 0 0 auto; }
+.pgn-app__row input[type="text"] { flex: 1 1 320px; }
+.pgn-app__text { display: block; min-height: 140px; margin-bottom: 14px; resize: vertical; }
+.pgn-app__variant .pgn-app__row { margin-bottom: 0; }
+
+.pgn-app__error {
+  margin: 14px 0 0;
+  color: $accent;
+  font-size: 0.85rem;
+}
+
+// The board column width is set on the viewer root by main.js; the board fills that column.
+.pgn-app__viewer {
+  --board-column: 480px;
+  padding-top: 24px;
+  border-top: 1px solid $line;
+}
+
+.pgn-viewer {
+  display: grid;
+  grid-template-columns: minmax(0, var(--board-column)) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.pgn-viewer__board {
+  width: 100%;
+  min-width: 0;
+}
+
+.pgn-viewer__board-host { width: 100%; }
+
+.pgn-viewer__select {
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 8px 10px;
+  border: 1px solid $line;
+  color: $ink;
+  background: rgba(255, 255, 255, 0.58);
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.pgn-viewer__select[hidden] { display: none; }
+
+.game-detail {
+  min-width: 0;
+  margin: 0;
+  padding: 28px;
+  border: 1px solid $line;
+  border-radius: 4px;
+  background: rgba(244, 241, 233, 0.72);
+}
+
+.game-detail-section { padding: 14px 0; }
+.game-detail-section + .game-detail-section { border-top: 1px solid $line; }
+.game-detail-section:first-child { padding-top: 0; }
+.game-detail-section:last-child { padding-bottom: 0; }
+
+.game-detail-event {
+  margin: 0 0 12px;
+  color: #68716d;
+  font-size: 1.3rem;
+  overflow-wrap: anywhere;
+}
+
+.game-detail-titlebar {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.game-detail-titlebar .game-detail-event { min-width: 0; margin: 0; }
+.game-detail-titlebar .game-detail-event:empty { display: none; }
+
+// The gear and panel reuse the board's settings classes (game-controls.css). Here the gear sits at the
+// right of the title row and the panel opens downward, aligned to its right edge.
+.game-detail-titlebar .pgn-viewer__settings {
+  flex: 0 0 auto;
+  width: 40px;
+  margin-left: auto;
+}
+
+.game-detail-titlebar .pgn-viewer__settings > .game-controls__summary { width: 100%; }
+
+.game-detail-titlebar .pgn-viewer__settings .game-controls__panel {
+  top: calc(100% + 8px);
+  right: 0;
+  bottom: auto;
+  left: auto;
+  min-width: 260px;
+}
+
+.game-detail-event:empty,
+.game-detail-result:empty { display: none; }
+
+.game-detail-tags-toggle {
+  min-height: 26px;
+  margin-bottom: 12px;
+  padding: 0 8px;
+  font-size: 0.6rem;
+}
+
+.game-detail-tags-toggle[hidden] { display: none; }
+
+.game-detail-extra-tags { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0 0 14px; font-size: 0.8rem; }
+.game-detail-extra-tags[hidden] { display: none; }
+.game-detail-extra-tags dt { color: $muted; font-size: 0.72rem; }
+.game-detail-extra-tags dd { margin: 0; color: $ink; overflow-wrap: anywhere; }
+
+.game-detail-player { margin: 0 0 6px; font-size: 1.05rem; overflow-wrap: anywhere; }
+.game-detail-label { margin-right: 8px; color: $muted; font-size: 0.72rem; }
+.game-detail-rating { color: $muted; font-size: 0.76rem; }
+
+.game-detail-opening { margin: 0; color: $ink; font-size: 0.95rem; line-height: 24px; overflow-wrap: anywhere; }
+.game-detail-opening:empty { display: none; }
+
+.game-detail-start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  padding: 0;
+  border: 0;
+  color: $teal;
+  background: transparent;
+  vertical-align: middle;
+}
+
+.game-detail-start:hover, .game-detail-start:focus-visible { color: $accent; background: transparent; }
+.game-detail-start svg { width: 18px; height: 18px; }
+
+.game-detail-empty { margin: 0; color: $muted; font-size: 0.85rem; }
+
+.game-detail-result { margin: 14px 0 0; padding-top: 14px; border-top: 1px solid $line; color: $teal; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.move-list { display: block; margin-bottom: 4px; line-height: 24px; white-space: normal; }
+.move-row { display: block; margin-bottom: 12px; }
+.move-row--tree { white-space: normal; }
+.move-variation { margin: 0 3px; white-space: normal; }
+.move-block { display: block; padding-left: calc(var(--depth, 0) * 1.5em); white-space: normal; }
+.move-bullet { color: $muted; }
+.move-number {
+  margin-right: 5px;
+  font-size: 1.2rem;
+  line-height: 24px;
+  vertical-align: middle;
+}
+.move-label { color: $muted; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.move-chip {
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: $ink;
+  background: transparent;
+  font: inherit;
+  font-size: 1.2rem;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-transform: none;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.move-row > .move-chip:first-of-type { font-size: 0.78rem; color: $muted; }
+.move-chip:hover, .move-chip:focus-visible { color: $teal; background: transparent; text-decoration: underline; }
+.move-chip.is-selected { color: $teal; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+@media (max-width: 800px) {
+  .pgn-viewer { grid-template-columns: minmax(0, 1fr); }
+  .pgn-app__viewer { --board-column: 100%; }
+}
