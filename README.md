@@ -70,5 +70,7 @@ Supported languages are Danish (`da`) and English (`en`). The language is an app
 - `src/i18n.js` – translations (da/en), `detectLocale` and `translate`.
 - `src/pgn.js` – PGN parser (`parsePgn`, `parseMoveText`). Pure logic, no DOM. Error messages follow `locale`.
 - `src/PgnViewer.js` – shows headers, the move list and the board. The header shows Event/Site/Date/Round, players, Opening/ECO/Date/Eval and Result. Opening, ECO and Eval are read from the PGN file, and empty fields are hidden. Extra tags are shown behind the "Show more tags" button, with names translated to the current language (for example "Hvid FIDE-id" in Danish) for the common tags. Unknown tags are shown with their PGN name. The icon before the game in the move list shows the start position.
-- `src/styles/pgn-viewer.scss` – styling, ported from `chessworkspace/frontend/src/styles/main.scss`.
+- `src/styles/pgn-viewer.scss` – styling for the viewer, ported from `chessworkspace/frontend/src/styles/main.scss`. Element selectors (`button`, `label`, `input`, …) are scoped with `:where(.pgn-app, .pgn-viewer)`, so they do not affect the host page.
+- `src/styles/page.scss` – page-level styling (`body`, `*`, `h1`/`h2`) for the demo page only; it is imported by `src/main.js`, not by the package entry point.
+- `src/styles/_tokens.scss` – colour variables shared by the stylesheets.
 - `src/main.js` – setup, example PGN, file selection and the variation form.

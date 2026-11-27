@@ -1,5 +1,6 @@
 import PgnViewer from './PgnViewer.js';
 import { translate } from './i18n.js';
+import './styles/page.scss';
 
 const SAMPLE_PGN = `[Event "Eksempelturnering"]
 [Site "København"]

@@ -1,6 +1,6 @@
 {
   "name": "chess-pgn-nyp",
-  "version": "0.1.2",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "description": "PGN-visning med header, trækliste og varianter. Bruger chess-board-nyp til brættet.",
