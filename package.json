@@ -12,7 +12,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "release:minor": "git pull && npm version minor -m \"chore: release %s\" && git push --follow-tags"
   },
   "dependencies": {
     "chess-board-nyp": "file:../chess-board-nyp",
