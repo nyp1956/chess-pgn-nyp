@@ -9,7 +9,7 @@ const OPENING_TAGS = ['Opening', 'ECO', 'Date', 'Eval'];
 const SHOWN_TAGS = new Set([...EVENT_TAGS, ...OPENING_TAGS, 'White', 'Black', 'WhiteElo', 'BlackElo', 'Result', 'FEN', 'SetUp']);
 const CHESS_BOARD_ICON = '<svg class="svg-inline--fa fa-chess-board" aria-hidden="true" focusable="false" viewBox="0 0 448 512"><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96V416C0 451.3 28.7 480 64 480H384C419.3 480 448 451.3 448 416V96C448 60.7 419.3 32 384 32H64ZM128 96V160H192V96H256V160H320V96H384V160H320V224H384V288H320V352H384V416H320V352H256V416H192V352H128V416H64V352H128V288H64V224H128V160H64V96H128ZM192 224H256V160H192V224ZM192 288V224H128V288H192ZM256 288H192V352H256V288ZM256 288H320V224H256V288Z"></path></svg>';
 // Same gear as the board's settings button.
-const SETTINGS_ICON = '<svg class="game-controls__icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 0 0 0 160z"></path></svg>';
+const SETTINGS_ICON = '<svg class="chess-game-controls__icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false"><path fill="currentColor" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 0 0 0 160z"></path></svg>';
 
 // PGN uses "?" and "????.??.??" for unknown values, so those count as missing.
 const hasValue = (value) => typeof value === 'string' && /[^?.\s]/.test(value);
@@ -102,11 +102,11 @@ export default class PgnViewer {
     const boardHost = el('div', 'pgn-viewer__board-host');
     boardFrame.append(boardHost);
 
-    const details = el('article', 'game-detail pgn-viewer__details');
+    const details = el('article', 'pgn-viewer__game-detail pgn-viewer__details');
     this.#refs.select = el('select', 'pgn-viewer__select');
     this.#refs.select.addEventListener('change', () => this.showGame(Number(this.#refs.select.value)));
-    this.#refs.moves = el('div', 'move-list');
-    this.#refs.result = el('p', 'game-detail-result');
+    this.#refs.moves = el('div', 'pgn-viewer__move-list');
+        this.#refs.result = el('p', 'pgn-viewer__game-detail-result');
     details.append(this.#refs.select, this.#buildHeader(), this.#refs.moves, this.#refs.result);
 
     if (this.#embedded) {
@@ -341,19 +341,19 @@ export default class PgnViewer {
 
   #renderEmpty() {
     this.#refs.header.hidden = true;
-    this.#refs.moves.replaceChildren(el('p', 'game-detail-empty', this.#t('viewer.empty')));
+    this.#refs.moves.replaceChildren(el('p', 'pgn-viewer__game-detail-empty', this.#t('viewer.empty')));
   }
 
   #buildHeader() {
     const refs = this.#refs;
-    refs.header = el('div', 'game-detail-head');
-    refs.event = el('p', 'game-detail-event');
+    refs.header = el('div', 'pgn-viewer__game-detail-head');
+        refs.event = el('p', 'pgn-viewer__game-detail-event');
 
     // Same markup and classes as the board's settings, so the board's stylesheet gives it the same look.
-    refs.settings = el('details', 'game-controls__settings pgn-viewer__settings');
-    refs.settingsSummary = el('summary', 'game-controls__button game-controls__summary');
+    refs.settings = el('details', 'chess-game-controls__settings pgn-viewer__settings');
+        refs.settingsSummary = el('summary', 'chess-game-controls__button chess-game-controls__summary');
     refs.settingsSummary.innerHTML = SETTINGS_ICON;
-    refs.settingsPanel = el('div', 'game-controls__panel');
+        refs.settingsPanel = el('div', 'chess-game-controls__panel');
     refs.settingsPanel.append(
       this.#settingOption('variationList'),
       this.#settingOption('figurine'),
@@ -364,24 +364,24 @@ export default class PgnViewer {
     document.addEventListener('click', (event) => {
       if (!refs.settings.contains(event.target)) refs.settings.open = false;
     });
-    refs.titleRow = el('div', 'game-detail-titlebar');
+    refs.titleRow = el('div', 'pgn-viewer__game-detail-titlebar');
     refs.titleRow.append(refs.event, refs.settings);
 
-    refs.tagsToggle = el('button', 'game-detail-tags-toggle');
+    refs.tagsToggle = el('button', 'pgn-viewer__game-detail-tags-toggle');
     refs.tagsToggle.type = 'button';
     refs.tagsToggle.addEventListener('click', () => this.#setTagsOpen(refs.extraTags.hidden));
-    refs.extraTags = el('dl', 'game-detail-extra-tags');
+    refs.extraTags = el('dl', 'pgn-viewer__game-detail-extra-tags');
 
     refs.white = this.#playerRow();
     refs.black = this.#playerRow();
 
-    refs.opening = el('p', 'game-detail-opening');
+    refs.opening = el('p', 'pgn-viewer__game-detail-opening');
 
-    const eventSection = el('div', 'game-detail-section');
+    const eventSection = el('div', 'pgn-viewer__game-detail-section');
     eventSection.append(refs.titleRow, refs.tagsToggle, refs.extraTags);
-    const playerSection = el('div', 'game-detail-section');
+    const playerSection = el('div', 'pgn-viewer__game-detail-section');
     playerSection.append(refs.white.row, refs.black.row);
-    refs.openingSection = el('div', 'game-detail-section');
+    refs.openingSection = el('div', 'pgn-viewer__game-detail-section');
     refs.openingSection.append(refs.opening);
 
     refs.header.append(eventSection, playerSection, refs.openingSection);
@@ -394,7 +394,7 @@ export default class PgnViewer {
     input.checked = this.#settings[name];
     input.addEventListener('change', () => this.#setSetting(name, input.checked));
     const text = el('span');
-    const label = el('label', 'game-controls__check');
+    const label = el('label', 'chess-game-controls__check');
     label.append(input, ' ', text);
     this.#refs[name] = { input, text };
     return label;
@@ -440,10 +440,10 @@ export default class PgnViewer {
   }
 
   #playerRow() {
-    const row = el('p', 'game-detail-player');
-    const label = el('span', 'game-detail-label');
-    const name = el('span', 'game-detail-name');
-    const rating = el('span', 'game-detail-rating');
+    const row = el('p', 'pgn-viewer__game-detail-player');
+        const label = el('span', 'pgn-viewer__game-detail-label');
+        const name = el('span', 'pgn-viewer__game-detail-name');
+        const rating = el('span', 'pgn-viewer__game-detail-rating');
     row.append(label, name, rating);
     return { row, label, name, rating };
   }
@@ -512,14 +512,14 @@ export default class PgnViewer {
 
     if (this.#game) list.append(this.#lineBlock(this.#game.line, [this.#startIcon()]));
     this.#variants.forEach((variant, index) => {
-      list.append(this.#lineBlock(variant, [el('span', 'move-label', this.#t('move.variation', { number: index + 1 })), this.#chip(variant, 0, this.#t('move.start'))]));
+      list.append(this.#lineBlock(variant, [el('span', 'pgn-viewer__move-label', this.#t('move.variation', { number: index + 1 })), this.#chip(variant, 0, this.#t('move.start'))]));
     });
 
     this.#selectedChip?.scrollIntoView({ block: 'nearest' });
   }
 
   #startIcon() {
-    const button = el('button', 'game-detail-start');
+    const button = el('button', 'pgn-viewer__game-detail-start');
     button.type = 'button';
     button.title = this.#t('start.show');
     button.setAttribute('aria-label', this.#t('start.show'));
@@ -529,7 +529,7 @@ export default class PgnViewer {
   }
 
   #lineBlock(line, lead) {
-    const block = el('div', 'move-row move-row--tree');
+    const block = el('div', 'pgn-viewer__move-row pgn-viewer__move-row--tree');
     if (this.#settings.variationList) {
       this.#renderBlocks(line, 0, block, lead);
     } else {
@@ -545,9 +545,9 @@ export default class PgnViewer {
     let pendingLead = lead;
     const current = () => {
       if (block) return block;
-      block = el('div', depth > 0 ? 'move-block move-block--branch' : 'move-block');
+      block = el('div', depth > 0 ? 'pgn-viewer__move-block pgn-viewer__move-block--branch' : 'pgn-viewer__move-block');
       block.style.setProperty('--depth', String(depth));
-      if (depth > 0) block.append(el('span', 'move-bullet', '•'), ' ');
+      if (depth > 0) block.append(el('span', 'pgn-viewer__move-bullet', '•'), ' ');
       block.append(...pendingLead, ' ');
       pendingLead = [];
       container.append(block);
@@ -574,9 +574,9 @@ export default class PgnViewer {
   #appendMove(line, index, container) {
     const move = line.moves[index];
     if (move.color === 'w') {
-      container.append(el('span', 'move-number', `${move.moveNumber}.`));
+      container.append(el('span', 'pgn-viewer__move-number', `${move.moveNumber}.`));
     } else if (index === 0 || line.moves[index - 1].variations.length > 0) {
-      container.append(el('span', 'move-number', `${move.moveNumber}...`));
+      container.append(el('span', 'pgn-viewer__move-number', `${move.moveNumber}...`));
     }
     const display = toLocaleSan(move.san, this.#locale, { figurine: this.#settings.figurine, color: move.color });
     container.append(this.#chip(line, index + 1, display, move.evaluation ?? null), ' ');
@@ -584,7 +584,7 @@ export default class PgnViewer {
 
   #renderVariations(variations, container) {
     variations.forEach((variation) => {
-      const wrap = el('span', 'move-variation');
+      const wrap = el('span', 'pgn-viewer__move-variation');
       wrap.append('(');
       this.#renderLine(variation, wrap);
       wrap.append(')');
@@ -594,9 +594,9 @@ export default class PgnViewer {
 
   // evaluation is optional text (set by the page) shown after the move in smaller type.
   #chip(line, ply, label, evaluation = null) {
-    const button = el('button', 'move-chip', label);
+    const button = el('button', 'pgn-viewer__move-chip', label);
     button.type = 'button';
-    if (evaluation) button.append(el('small', 'move-eval', evaluation));
+    if (evaluation) button.append(el('small', 'pgn-viewer__move-eval', evaluation));
     const selected = line === this.#line && ply === this.#ply;
     button.classList.toggle('is-selected', selected);
     button.setAttribute('aria-pressed', String(selected));

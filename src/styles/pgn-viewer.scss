@@ -155,14 +155,14 @@ input[type="range"] { width: 100%; accent-color: $teal; }
 .pgn-viewer__select[hidden] { display: none; }
 
 // The text size slider sits in the gear panel. The board's panel styles give inputs a 15px width, so it is overridden here.
-.pgn-viewer__settings .game-controls__panel input[type="range"],
-.pgn-viewer__settings .game-controls__panel select {
+.pgn-viewer__settings .chess-game-controls__panel input[type="range"],
+.pgn-viewer__settings .chess-game-controls__panel select {
   width: 100%;
   min-width: 0;
   min-height: 0;
 }
 
-.game-detail {
+.pgn-viewer__game-detail {
   min-width: 0;
   margin: 0;
   padding: 28px;
@@ -171,39 +171,39 @@ input[type="range"] { width: 100%; accent-color: $teal; }
   background: rgba(244, 241, 233, 0.72);
 }
 
-.game-detail-section { padding: 14px 0; }
-.game-detail-section + .game-detail-section { border-top: 1px solid $line; }
-.game-detail-section:first-child { padding-top: 0; }
-.game-detail-section:last-child { padding-bottom: 0; }
+.pgn-viewer__game-detail-section { padding: 14px 0; }
+.pgn-viewer__game-detail-section + .pgn-viewer__game-detail-section { border-top: 1px solid $line; }
+.pgn-viewer__game-detail-section:first-child { padding-top: 0; }
+.pgn-viewer__game-detail-section:last-child { padding-bottom: 0; }
 
-.game-detail-event {
+.pgn-viewer__game-detail-event {
   margin: 0 0 12px;
   color: #68716d;
   font-size: calc(1.3rem * var(--text-scale));
   overflow-wrap: anywhere;
 }
 
-.game-detail-titlebar {
+.pgn-viewer__game-detail-titlebar {
   display: flex;
   align-items: flex-start;
   gap: 12px;
   margin-bottom: 12px;
 }
 
-.game-detail-titlebar .game-detail-event { min-width: 0; margin: 0; }
-.game-detail-titlebar .game-detail-event:empty { display: none; }
+.pgn-viewer__game-detail-titlebar .pgn-viewer__game-detail-event { min-width: 0; margin: 0; }
+.pgn-viewer__game-detail-titlebar .pgn-viewer__game-detail-event:empty { display: none; }
 
-// The gear and panel reuse the board's settings classes (game-controls.css). Here the gear sits at the
+// The gear and panel reuse the board's settings classes (chess-game-controls.css). Here the gear sits at the
 // right of the title row and the panel opens downward, aligned to its right edge.
-.game-detail-titlebar .pgn-viewer__settings {
+.pgn-viewer__game-detail-titlebar .pgn-viewer__settings {
   flex: 0 0 auto;
   width: 40px;
   margin-left: auto;
 }
 
-.game-detail-titlebar .pgn-viewer__settings > .game-controls__summary { width: 100%; }
+.pgn-viewer__game-detail-titlebar .pgn-viewer__settings > .chess-game-controls__summary { width: 100%; }
 
-.game-detail-titlebar .pgn-viewer__settings .game-controls__panel {
+.pgn-viewer__game-detail-titlebar .pgn-viewer__settings .chess-game-controls__panel {
   top: calc(100% + 8px);
   right: 0;
   bottom: auto;
@@ -211,31 +211,31 @@ input[type="range"] { width: 100%; accent-color: $teal; }
   min-width: 260px;
 }
 
-.game-detail-event:empty,
-.game-detail-result:empty { display: none; }
+.pgn-viewer__game-detail-event:empty,
+.pgn-viewer__game-detail-result:empty { display: none; }
 
-.game-detail-tags-toggle {
+.pgn-viewer__game-detail-tags-toggle {
   min-height: 26px;
   margin-bottom: 12px;
   padding: 0 8px;
   font-size: calc(0.6rem * var(--text-scale));
 }
 
-.game-detail-tags-toggle[hidden] { display: none; }
+.pgn-viewer__game-detail-tags-toggle[hidden] { display: none; }
 
-.game-detail-extra-tags { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0 0 14px; font-size: calc(0.8rem * var(--text-scale)); }
-.game-detail-extra-tags[hidden] { display: none; }
-.game-detail-extra-tags dt { color: $muted; font-size: calc(0.72rem * var(--text-scale)); }
-.game-detail-extra-tags dd { margin: 0; color: $ink; overflow-wrap: anywhere; }
+.pgn-viewer__game-detail-extra-tags { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0 0 14px; font-size: calc(0.8rem * var(--text-scale)); }
+.pgn-viewer__game-detail-extra-tags[hidden] { display: none; }
+.pgn-viewer__game-detail-extra-tags dt { color: $muted; font-size: calc(0.72rem * var(--text-scale)); }
+.pgn-viewer__game-detail-extra-tags dd { margin: 0; color: $ink; overflow-wrap: anywhere; }
 
-.game-detail-player { margin: 0 0 6px; font-size: calc(1.05rem * var(--text-scale)); overflow-wrap: anywhere; }
-.game-detail-label { margin-right: 8px; color: $muted; font-size: calc(0.72rem * var(--text-scale)); }
-.game-detail-rating { color: $muted; font-size: calc(0.76rem * var(--text-scale)); }
+.pgn-viewer__game-detail-player { margin: 0 0 6px; font-size: calc(1.05rem * var(--text-scale)); overflow-wrap: anywhere; }
+.pgn-viewer__game-detail-label { margin-right: 8px; color: $muted; font-size: calc(0.72rem * var(--text-scale)); }
+.pgn-viewer__game-detail-rating { color: $muted; font-size: calc(0.76rem * var(--text-scale)); }
 
-.game-detail-opening { margin: 0; color: $ink; font-size: calc(0.95rem * var(--text-scale)); line-height: calc(24px * var(--text-scale)); overflow-wrap: anywhere; }
-.game-detail-opening:empty { display: none; }
+.pgn-viewer__game-detail-opening { margin: 0; color: $ink; font-size: calc(0.95rem * var(--text-scale)); line-height: calc(24px * var(--text-scale)); overflow-wrap: anywhere; }
+.pgn-viewer__game-detail-opening:empty { display: none; }
 
-.game-detail-start {
+.pgn-viewer__game-detail-start {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -247,28 +247,28 @@ input[type="range"] { width: 100%; accent-color: $teal; }
   vertical-align: middle;
 }
 
-.game-detail-start:hover, .game-detail-start:focus-visible { color: $accent; background: transparent; }
-.game-detail-start svg { width: calc(18px * var(--text-scale)); height: calc(18px * var(--text-scale)); }
+.pgn-viewer__game-detail-start:hover, .pgn-viewer__game-detail-start:focus-visible { color: $accent; background: transparent; }
+.pgn-viewer__game-detail-start svg { width: calc(18px * var(--text-scale)); height: calc(18px * var(--text-scale)); }
 
-.game-detail-empty { margin: 0; color: $muted; font-size: calc(0.85rem * var(--text-scale)); }
+.pgn-viewer__game-detail-empty { margin: 0; color: $muted; font-size: calc(0.85rem * var(--text-scale)); }
 
-.game-detail-result { margin: 14px 0 0; padding-top: 14px; border-top: 1px solid $line; color: $teal; font-size: calc(0.74rem * var(--text-scale)); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.pgn-viewer__game-detail-result { margin: 14px 0 0; padding-top: 14px; border-top: 1px solid $line; color: $teal; font-size: calc(0.74rem * var(--text-scale)); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
-.move-list { display: block; margin-bottom: 4px; line-height: calc(24px * var(--text-scale)); white-space: normal; }
-.move-row { display: block; margin-bottom: 12px; }
-.move-row--tree { white-space: normal; }
-.move-variation { margin: 0 3px; white-space: normal; }
-.move-block { display: block; padding-left: calc(var(--depth, 0) * 1.5em); white-space: normal; }
-.move-bullet { color: $muted; }
-.move-number {
+.pgn-viewer__move-list { display: block; margin-bottom: 4px; line-height: calc(24px * var(--text-scale)); white-space: normal; }
+.pgn-viewer__move-row { display: block; margin-bottom: 12px; }
+.pgn-viewer__move-row--tree { white-space: normal; }
+.pgn-viewer__move-variation { margin: 0 3px; white-space: normal; }
+.pgn-viewer__move-block { display: block; padding-left: calc(var(--depth, 0) * 1.5em); white-space: normal; }
+.pgn-viewer__move-bullet { color: $muted; }
+.pgn-viewer__move-number {
   margin-right: 5px;
   font-size: calc(1.2rem * var(--text-scale));
   line-height: calc(24px * var(--text-scale));
   vertical-align: middle;
 }
-.move-label { color: $muted; font-size: calc(0.68rem * var(--text-scale)); letter-spacing: 0.08em; text-transform: uppercase; }
+.pgn-viewer__move-label { color: $muted; font-size: calc(0.68rem * var(--text-scale)); letter-spacing: 0.08em; text-transform: uppercase; }
 
-.move-chip {
+.pgn-viewer__move-chip {
   min-height: calc(24px * var(--text-scale));
   padding: 0;
   border: 0;
@@ -284,10 +284,10 @@ input[type="range"] { width: 100%; accent-color: $teal; }
   cursor: pointer;
 }
 
-.move-row > .move-chip:first-of-type { font-size: calc(0.78rem * var(--text-scale)); color: $muted; }
-.move-chip:hover, .move-chip:focus-visible { color: $teal; background: transparent; text-decoration: underline; }
-.move-chip.is-selected { color: $teal; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
-.move-eval { margin-left: 4px; color: $muted; font-size: .68em; font-weight: 400; }
+.pgn-viewer__move-row > .pgn-viewer__move-chip:first-of-type { font-size: calc(0.78rem * var(--text-scale)); color: $muted; }
+.pgn-viewer__move-chip:hover, .pgn-viewer__move-chip:focus-visible { color: $teal; background: transparent; text-decoration: underline; }
+.pgn-viewer__move-chip.is-selected { color: $teal; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.pgn-viewer__move-eval { margin-left: 4px; color: $muted; font-size: .68em; font-weight: 400; }
 
 @media (max-width: 800px) {
   .pgn-viewer { grid-template-columns: minmax(0, 1fr); }
